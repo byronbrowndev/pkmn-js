@@ -1,0 +1,15 @@
+/**
+    css goes here
+ */
+
+ .box {
+     display: flex;
+     flex-wrap: wrap;
+ }
+
+ .box > * {
+     border: 1px solid black;
+     list-style-type: none;
+     text-align: center;
+     padding: 5px;
+ }
