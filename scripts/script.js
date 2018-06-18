@@ -2,14 +2,13 @@
 function clearAll() {
     localStorage.clear();
     const ul = document.getElementById('caught');
-    while (ul.hasChildNodes()) {
-        ul.removeChild(ul.lastChild);
-    }
+    while (ul.children.length > 1) { ul.removeChild(ul.firstElementChild); }
 }
 
 // side effect display on screen
 function populatePokemon(name, id, pic) {
-    const ul = document.getElementById('caught');
+    const ul = document.querySelector('#caught');
+    const spinner = document.querySelector('#spinner');
     const li = document.createElement('li');
     const div = document.createElement('div');
     const h4 = document.createElement('h4');
@@ -20,7 +19,7 @@ function populatePokemon(name, id, pic) {
     div.appendChild(h4);
     div.appendChild(img);
     li.appendChild(div);
-    ul.appendChild(li);
+    ul.insertBefore(li, spinner);
 }
 
 function generatePokedex() {
@@ -48,12 +47,30 @@ function addNewPokemon({id, name, sprites}) {
     populatePokemon(name, id, sprites.front_default);
 }
 
-// http call and sideeffects, not pure
+// http call and side effects, not pure
 async function findPokemon() { 
+    document.getElementById('spinner').style.display = 'flex';
     const genOne = Math.floor(Math.random() * 151) + 1;
-    await fetch(`http://pokeapi.salestock.net/api/v2/pokemon/${genOne}`)
-        .then(response => response.json())
-        .then(data => addNewPokemon(data));
+    const ownCheck = ownershipCheck(genOne);
+    if (ownCheck < 0) {
+        await fetch(`http://pokeapi.salestock.net/api/v2/pokemon/${genOne}`)
+            .then(response => response.json())
+            .then(data => addNewPokemon(data))
+            .then(() => hideSpinner());
+    } else {
+        alert('you already have a ' + ownCheck)
+    }
+}
+
+function hideSpinner() {
+    document.getElementById('spinner').style.display = 'none';
+}
+
+function ownershipCheck(id) {
+    const thePkmnIdIndex = localStorage.myPokemonIds ? localStorage.myPokemonIds.split('&&').findIndex(i => parseInt(i) === id) : -1;
+    if (thePkmnIdIndex < 0) { return thePkmnIdIndex }
+    hideSpinner();
+    return localStorage.myPokemonNames.split('&&')[thePkmnIdIndex];
 }
 
 window.onload = generatePokedex;
