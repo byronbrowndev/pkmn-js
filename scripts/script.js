@@ -9,16 +9,14 @@ function clearAll() {
 function populatePokemon(name, id, pic) {
     const ul = document.querySelector('#caught');
     const spinner = document.querySelector('#spinner');
-    const li = document.createElement('li');
-    const div = document.createElement('div');
-    const h4 = document.createElement('h4');
-    const img = document.createElement('img');
-
-    img.setAttribute('src', pic);
-    h4.appendChild(document.createTextNode(`#${id} ${name}`));
-    div.appendChild(h4);
-    div.appendChild(img);
-    li.appendChild(div);
+    const li = document.createRange().createContextualFragment(`
+        <li>
+            <div>
+                <h4>#${id} ${name}</h4>
+                <img src=${pic}>
+            </div>
+        </li>
+    `);
     ul.insertBefore(li, spinner);
 }
 
