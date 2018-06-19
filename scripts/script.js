@@ -48,6 +48,8 @@ function addNewPokemon({id, name, sprites}) {
 // http call and side effects, not pure
 async function findPokemon() { 
     document.getElementById('spinner').style.display = 'flex';
+    document.getElementById('findButton').disabled = true;
+    document.getElementById('clearButton').disabled = true;
     const genOne = Math.floor(Math.random() * 151) + 1;
     const ownCheck = ownershipCheck(genOne);
     if (ownCheck < 0) {
@@ -62,6 +64,8 @@ async function findPokemon() {
 
 function hideSpinner() {
     document.getElementById('spinner').style.display = 'none';
+    document.getElementById('findButton').disabled = false;
+    document.getElementById('clearButton').disabled = false;
 }
 
 function ownershipCheck(id) {
