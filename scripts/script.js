@@ -53,7 +53,7 @@ async function findPokemon() {
     const genOne = Math.floor(Math.random() * 151) + 1;
     const ownCheck = ownershipCheck(genOne);
     if (ownCheck < 0) {
-        await fetch(`http://pokeapi.salestock.net/api/v2/pokemon/${genOne}`)
+        await fetch(`https://pokeapi.co/api/v2/pokemon/${genOne}/`)
             .then(response => response.json())
             .then(data => addNewPokemon(data))
             .then(() => hideSpinner());
